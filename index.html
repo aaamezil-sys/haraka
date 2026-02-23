@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HarakaMed — AI-Powered Markerless Motion Assessment</title>
 <meta name="description" content="Real-time joint angle tracking and gait analysis using just a webcam. Guided clinical protocol, bilingual Arabic + English, PDF reports. No special hardware required.">
+<meta name="author" content="Ahmed <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HarakaMed — AI-Powered Markerless Motion Assessment</title>
+<meta name="description" content="Real-time joint angle tracking and gait analysis using just a webcam. Guided clinical protocol, bilingual Arabic + English, PDF reports. No special hardware required.">
 <meta name="author" content="Ahmed Mezil, P.Eng.">
 <meta name="keywords" content="motion assessment, physiotherapy, joint angles, gait analysis, MediaPipe, markerless, Arabic, clinical, rehabilitation, HarakaMed">
 
@@ -65,6 +72,9 @@ body.ar-mode .mono{font-family:var(--mono)}
 .lbtn.on{background:var(--card);color:var(--teal-d);box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .lbtn .flag{font-size:14px}
 
+/* Mobile Warning Banner (Hidden by default) */
+.mob-warn{display:none;background:var(--amb-bg);color:var(--amb);padding:8px 12px;font-size:11px;font-weight:600;text-align:center;border-bottom:1px solid var(--bdr);flex-shrink:0;z-index:90}
+
 /* ═══ MAIN ═══ */
 .main{flex:1;display:grid;grid-template-columns:1fr 360px;gap:0;overflow:hidden}
 
@@ -74,8 +84,9 @@ body.ar-mode .mono{font-family:var(--mono)}
 .cam-bar span{font-size:10px;color:#475569;font-family:var(--mono)}
 .cam-area{flex:1;display:flex;align-items:center;justify-content:center;position:relative;background:#050A14}
 .cam-area video{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
-.cam-frame{position:relative;width:100%;aspect-ratio:16/9;max-height:100%;overflow:hidden}
-.cam-frame canvas{position:absolute;inset:0;width:100%;height:100%;display:none}
+/* Fixed to use object-fit for perfect ratio preservation */
+.cam-frame{position:relative;width:100%;height:100%;overflow:hidden}
+.cam-frame canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:none}
 .cam-empty{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
 .ce-ring{width:80px;height:80px;border-radius:50%;border:2px solid rgba(20,184,166,.12);display:flex;align-items:center;justify-content:center;margin-bottom:22px}
 .ce-h{color:#E2E8F0;font-size:20px;font-weight:700;margin-bottom:8px}
@@ -176,55 +187,26 @@ body.ar-mode .mono{font-family:var(--mono)}
 
 /* ═══ MOBILE RESPONSIVENESS ═══ */
 @media (max-width: 768px) {
-  /* Convert grid to a vertical flex layout */
-  .main {
-    display: flex;
-    flex-direction: column;
-  }
+  .mob-warn { display: block; }
+  .main { display: flex; flex-direction: column; }
+  .left { height: 40vh; min-height: 250px; flex-shrink: 0; }
+  .right { border-left: none; border-top: 1px solid var(--bdr); flex: 1; }
   
-  /* Make the camera section fixed height at the top */
-  .left {
-    height: 38vh;
-    min-height: 250px;
-    flex-shrink: 0;
-  }
-  
-  /* Let the right panel scroll below the camera */
-  .right {
-    border-left: none;
-    border-top: 1px solid var(--bdr);
-    flex: 1;
-  }
-  
-  /* Header adjustments for less space */
   .hdr { padding: 0 12px; }
   .tag { display: none; }
-  .h-stat { display: none; } /* Hide 'Camera Ready' text, just keep the dot */
+  .h-stat { display: none; }
   .ltog { height: 28px; }
   .lbtn { padding: 0 8px; font-size: 10px; }
   
-  /* Bottom bar adjustments (allow wrapping, stack nicely) */
-  .bot {
-    height: auto;
-    flex-direction: column;
-    padding: 12px;
-    gap: 12px;
-  }
+  .bot { height: auto; flex-direction: column; padding: 12px; gap: 12px; }
   .bot-l { width: 100%; justify-content: space-between; gap: 12px; }
   .inp { flex: 1; width: auto; }
   .bot-r { width: 100%; gap: 10px; justify-content: space-between; }
   .btn { flex: 1; justify-content: center; }
   
-  /* Move developer credit and disclaimer below buttons */
-  .bot-c { 
-    width: 100%; 
-    justify-content: space-between; 
-    padding-top: 4px; 
-    border-top: 1px solid var(--bdr); 
-  }
+  .bot-c { width: 100%; justify-content: space-between; padding-top: 4px; border-top: 1px solid var(--bdr); }
   .founder, .disc { font-size: 7.5px; }
   
-  /* Shrink camera empty state elements to fit smaller height */
   .ce-ring { width: 50px; height: 50px; margin-bottom: 12px; }
   .ce-ring svg { width: 20px; height: 20px; }
   .ce-h { font-size: 16px; }
@@ -251,6 +233,7 @@ body.ar-mode .mono{font-family:var(--mono)}
     </div>
   </div>
 </header>
+<div class="mob-warn" id="mob-warn" data-t="mobWarn">⚠ Best experienced on desktop</div>
 
 <div class="main">
   <div class="left">
@@ -378,6 +361,7 @@ const T={
     camActive:'✓ Camera active — Pose tracking running',assessDone:'✓ Assessment complete — Export PDF when ready',
     printOpen:'✓ Print dialog opened — Save as PDF',camDenied:'Camera Access Denied',
     camDeniedP:'Allow camera permissions in browser and reload.<br>Ensure no other app is using the camera.',tryAgain:'↻ Try Again',
+    mobWarn:'⚠ Best experienced on desktop'
   },
   ar:{
     tag:'النسخة السريرية',camReady:'الكاميرا جاهزة',liveMeas:'القياسات الحية',ready:'جاهز',
@@ -398,6 +382,7 @@ const T={
     camActive:'✓ الكاميرا نشطة — التتبع يعمل',assessDone:'✓ اكتمل التقييم — جاهز لتصدير PDF',
     printOpen:'✓ نافذة الطباعة مفتوحة — احفظ كـ PDF',camDenied:'تم رفض الوصول للكاميرا',
     camDeniedP:'اسمح بأذونات الكاميرا في المتصفح وأعد التحميل.<br>تأكد من عدم استخدام تطبيق آخر للكاميرا.',tryAgain:'↻ حاول مرة أخرى',
+    mobWarn:'⚠ يفضل الاستخدام على سطح المكتب'
   }
 };
 const PROTO=[
@@ -537,7 +522,7 @@ function buildPDF(){
 body{font-family:Helvetica,Arial,sans-serif;color:#0B1222;width:210mm;min-height:297mm;margin:0 auto}
 .ar{font-family:'Noto Kufi Arabic',sans-serif;direction:rtl;text-align:right}
 .hdr{background:#0B1222;padding:20px 24px 16px;position:relative}
-.hdr::after{content:'absolute;top:0;left:0;right:0;height:5px;background:#0D9488}
+.hdr::after{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:#0D9488}
 .hdr h1{color:#fff;font-size:26px;font-weight:800}
 .hdr .sub{color:#99F6E4;font-size:12px;margin-top:3px}
 .hdr .sub-ar{font-family:'Noto Kufi Arabic',sans-serif;color:#64748B;font-size:10px;margin-top:2px;direction:rtl}
