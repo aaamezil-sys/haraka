@@ -8,7 +8,6 @@
 <meta name="author" content="Ahmed Mezil, P.Eng.">
 <meta name="keywords" content="motion assessment, physiotherapy, joint angles, gait analysis, MediaPipe, markerless, Arabic, clinical, rehabilitation, HarakaMed">
 
-<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://haraka.ahmedmezil.com">
 <meta property="og:title" content="HarakaMed — AI-Powered Markerless Motion Assessment">
@@ -17,13 +16,11 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="HarakaMed — AI Motion Assessment">
 <meta name="twitter:description" content="Webcam-based joint tracking for physiotherapy clinics. Arabic + English. No special hardware.">
 <meta name="twitter:image" content="https://haraka.ahmedmezil.com/og-image.png">
 
-<!-- Favicon -->
 <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <meta name="theme-color" content="#0D9488">
@@ -176,6 +173,63 @@ body.ar-mode .mono{font-family:var(--mono)}
 @keyframes blk{0%,100%{opacity:1}50%{opacity:.15}}
 .toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--card);color:var(--tx);padding:9px 20px;border-radius:10px;font-size:12px;font-weight:500;box-shadow:0 8px 30px rgba(0,0,0,.12);opacity:0;transition:all .25s;z-index:999;pointer-events:none;border:1px solid var(--bdr)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ═══ MOBILE RESPONSIVENESS ═══ */
+@media (max-width: 768px) {
+  /* Convert grid to a vertical flex layout */
+  .main {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Make the camera section fixed height at the top */
+  .left {
+    height: 38vh;
+    min-height: 250px;
+    flex-shrink: 0;
+  }
+  
+  /* Let the right panel scroll below the camera */
+  .right {
+    border-left: none;
+    border-top: 1px solid var(--bdr);
+    flex: 1;
+  }
+  
+  /* Header adjustments for less space */
+  .hdr { padding: 0 12px; }
+  .tag { display: none; }
+  .h-stat { display: none; } /* Hide 'Camera Ready' text, just keep the dot */
+  .ltog { height: 28px; }
+  .lbtn { padding: 0 8px; font-size: 10px; }
+  
+  /* Bottom bar adjustments (allow wrapping, stack nicely) */
+  .bot {
+    height: auto;
+    flex-direction: column;
+    padding: 12px;
+    gap: 12px;
+  }
+  .bot-l { width: 100%; justify-content: space-between; gap: 12px; }
+  .inp { flex: 1; width: auto; }
+  .bot-r { width: 100%; gap: 10px; justify-content: space-between; }
+  .btn { flex: 1; justify-content: center; }
+  
+  /* Move developer credit and disclaimer below buttons */
+  .bot-c { 
+    width: 100%; 
+    justify-content: space-between; 
+    padding-top: 4px; 
+    border-top: 1px solid var(--bdr); 
+  }
+  .founder, .disc { font-size: 7.5px; }
+  
+  /* Shrink camera empty state elements to fit smaller height */
+  .ce-ring { width: 50px; height: 50px; margin-bottom: 12px; }
+  .ce-ring svg { width: 20px; height: 20px; }
+  .ce-h { font-size: 16px; }
+  .ce-p { font-size: 11px; margin-bottom: 16px; padding: 0 10px; }
+}
 </style>
 </head>
 <body>
@@ -286,16 +340,16 @@ body.ar-mode .mono{font-family:var(--mono)}
     <input type="text" class="inp" id="pname" data-t-placeholder="patientPh" placeholder="Patient name / اسم المريض" />
     <span class="tmr" id="tmr">00:00</span>
   </div>
-  <div class="bot-c">
-    <span class="founder">Developed by <strong>Ahmed Mezil, P.Eng.</strong></span>
-    <span class="disc" data-t="disc">⚠ Clinical support only — not a medical diagnosis</span>
-  </div>
   <div class="bot-r">
     <button class="btn btn-rc" id="rbtn" onclick="toggleRec()" disabled><span class="rdot"></span><span id="rlbl" data-t="record">Record</span></button>
     <button class="btn btn-tl" id="ebtn" onclick="doExport()" disabled>
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
       <span data-t="exportPdf">Export PDF</span>
     </button>
+  </div>
+  <div class="bot-c">
+    <span class="founder">Developed by <strong>Ahmed Mezil, P.Eng.</strong></span>
+    <span class="disc" data-t="disc">⚠ Clinical support only — not a medical diagnosis</span>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -483,7 +537,7 @@ function buildPDF(){
 body{font-family:Helvetica,Arial,sans-serif;color:#0B1222;width:210mm;min-height:297mm;margin:0 auto}
 .ar{font-family:'Noto Kufi Arabic',sans-serif;direction:rtl;text-align:right}
 .hdr{background:#0B1222;padding:20px 24px 16px;position:relative}
-.hdr::after{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:#0D9488}
+.hdr::after{content:'absolute;top:0;left:0;right:0;height:5px;background:#0D9488}
 .hdr h1{color:#fff;font-size:26px;font-weight:800}
 .hdr .sub{color:#99F6E4;font-size:12px;margin-top:3px}
 .hdr .sub-ar{font-family:'Noto Kufi Arabic',sans-serif;color:#64748B;font-size:10px;margin-top:2px;direction:rtl}
@@ -597,4 +651,4 @@ tr:nth-child(even){background:#FAFBFC}
 }
 </script>
 </body>
-</html> 
+</html>
