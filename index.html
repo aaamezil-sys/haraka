@@ -3,34 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HarakaMed — AI-Powered Markerless Motion Assessment</title>
-<meta name="description" content="Real-time joint angle tracking and gait analysis using just a webcam. Guided clinical protocol, bilingual Arabic + English, PDF reports. No special hardware required.">
-<meta name="author" content="Ahmed <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HarakaMed — AI-Powered Markerless Motion Assessment</title>
-<meta name="description" content="Real-time joint angle tracking and gait analysis using just a webcam. Guided clinical protocol, bilingual Arabic + English, PDF reports. No special hardware required.">
-<meta name="author" content="Ahmed Mezil, P.Eng.">
-<meta name="keywords" content="motion assessment, physiotherapy, joint angles, gait analysis, MediaPipe, markerless, Arabic, clinical, rehabilitation, HarakaMed">
-
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://haraka.ahmedmezil.com">
-<meta property="og:title" content="HarakaMed — AI-Powered Markerless Motion Assessment">
-<meta property="og:description" content="Real-time joint angle tracking and gait analysis using just a webcam. Guided clinical protocol, bilingual Arabic + English, PDF reports. Built for Saudi clinics.">
-<meta property="og:image" content="https://haraka.ahmedmezil.com/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="HarakaMed — AI Motion Assessment">
-<meta name="twitter:description" content="Webcam-based joint tracking for physiotherapy clinics. Arabic + English. No special hardware.">
-<meta name="twitter:image" content="https://haraka.ahmedmezil.com/og-image.png">
-
-<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<meta name="theme-color" content="#0D9488">
+<title>HarakaMed — Clinical Motion Assessment</title>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
@@ -47,7 +20,7 @@
   --sans:'Outfit',sans-serif;--ar:'Noto Kufi Arabic',sans-serif;--mono:'IBM Plex Mono',monospace;
   --r:12px;--rs:8px;
 }
-body{font-family:var(--sans);background:var(--bg);color:var(--tx);height:100vh;overflow:hidden;display:flex;flex-direction:column}
+body{font-family:var(--sans);background:var(--bg);color:var(--tx);height:100vh;height:100dvh;overflow:hidden;display:flex;flex-direction:column}
 body.ar-mode{font-family:var(--ar)}
 body.ar-mode .mono{font-family:var(--mono)}
 .mono{font-family:var(--mono)}
@@ -72,9 +45,6 @@ body.ar-mode .mono{font-family:var(--mono)}
 .lbtn.on{background:var(--card);color:var(--teal-d);box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .lbtn .flag{font-size:14px}
 
-/* Mobile Warning Banner (Hidden by default) */
-.mob-warn{display:none;background:var(--amb-bg);color:var(--amb);padding:8px 12px;font-size:11px;font-weight:600;text-align:center;border-bottom:1px solid var(--bdr);flex-shrink:0;z-index:90}
-
 /* ═══ MAIN ═══ */
 .main{flex:1;display:grid;grid-template-columns:1fr 360px;gap:0;overflow:hidden}
 
@@ -84,9 +54,8 @@ body.ar-mode .mono{font-family:var(--mono)}
 .cam-bar span{font-size:10px;color:#475569;font-family:var(--mono)}
 .cam-area{flex:1;display:flex;align-items:center;justify-content:center;position:relative;background:#050A14}
 .cam-area video{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
-/* Fixed to use object-fit for perfect ratio preservation */
-.cam-frame{position:relative;width:100%;height:100%;overflow:hidden}
-.cam-frame canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:none}
+.cam-frame{position:relative;width:100%;aspect-ratio:16/9;max-height:100%;overflow:hidden}
+.cam-frame canvas{position:absolute;inset:0;width:100%;height:100%;display:none}
 .cam-empty{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
 .ce-ring{width:80px;height:80px;border-radius:50%;border:2px solid rgba(20,184,166,.12);display:flex;align-items:center;justify-content:center;margin-bottom:22px}
 .ce-h{color:#E2E8F0;font-size:20px;font-weight:700;margin-bottom:8px}
@@ -170,7 +139,7 @@ body.ar-mode .mono{font-family:var(--mono)}
 .bot-c{flex:1;display:flex;align-items:center;justify-content:center;gap:16px}
 .founder{font-size:9px;color:var(--tx4);font-weight:500;letter-spacing:.3px}
 .founder strong{color:var(--tx3);font-weight:600}
-.disc{font-size:8px;color:var(--tx4)}
+.disc{font-size:9.5px;color:var(--tx4)}
 .bot-r{display:flex;align-items:center;gap:6px}
 .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:var(--rs);font-size:12px;font-weight:600;font-family:var(--sans);border:1px solid transparent;cursor:pointer;transition:all .15s;white-space:nowrap}
 .btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important}
@@ -185,32 +154,46 @@ body.ar-mode .mono{font-family:var(--mono)}
 .toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--card);color:var(--tx);padding:9px 20px;border-radius:10px;font-size:12px;font-weight:500;box-shadow:0 8px 30px rgba(0,0,0,.12);opacity:0;transition:all .25s;z-index:999;pointer-events:none;border:1px solid var(--bdr)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ═══ MOBILE RESPONSIVENESS ═══ */
-@media (max-width: 768px) {
-  .mob-warn { display: block; }
-  .main { display: flex; flex-direction: column; }
-  .left { height: 40vh; min-height: 250px; flex-shrink: 0; }
-  .right { border-left: none; border-top: 1px solid var(--bdr); flex: 1; }
-  
-  .hdr { padding: 0 12px; }
-  .tag { display: none; }
-  .h-stat { display: none; }
-  .ltog { height: 28px; }
-  .lbtn { padding: 0 8px; font-size: 10px; }
-  
-  .bot { height: auto; flex-direction: column; padding: 12px; gap: 12px; }
-  .bot-l { width: 100%; justify-content: space-between; gap: 12px; }
-  .inp { flex: 1; width: auto; }
-  .bot-r { width: 100%; gap: 10px; justify-content: space-between; }
-  .btn { flex: 1; justify-content: center; }
-  
-  .bot-c { width: 100%; justify-content: space-between; padding-top: 4px; border-top: 1px solid var(--bdr); }
-  .founder, .disc { font-size: 7.5px; }
-  
-  .ce-ring { width: 50px; height: 50px; margin-bottom: 12px; }
-  .ce-ring svg { width: 20px; height: 20px; }
-  .ce-h { font-size: 16px; }
-  .ce-p { font-size: 11px; margin-bottom: 16px; padding: 0 10px; }
+/* ═══ Countdown Overlay ═══ */
+.countdown{position:absolute;inset:0;z-index:15;background:rgba(5,10,20,.88);display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.countdown.vis{display:flex}
+.cd-num{font-size:96px;font-weight:800;color:#14B8A6;font-family:var(--mono);line-height:1;text-shadow:0 0 40px rgba(20,184,166,.4)}
+.cd-lbl{font-size:16px;font-weight:600;color:#94A3B8}
+
+/* ═══ Delay selector ═══ */
+.delay-sel{padding:5px 8px;border:1px solid var(--bdr);border-radius:var(--rs);font-size:11px;font-family:var(--sans);background:var(--input);color:var(--tx2);outline:none;cursor:pointer}
+.delay-sel:focus{border-color:var(--teal)}
+
+/* ═══ MOBILE ═══ */
+@media(max-width:768px){
+  .main{display:flex;flex-direction:column}
+  .left{flex-shrink:0;height:auto;max-height:50dvh}
+  .cam-frame{aspect-ratio:3/4!important}
+  .right{border-left:none;border-top:1px solid var(--bdr);flex:1;min-height:0}
+  .hdr{padding:0 12px;height:46px}
+  .tag{display:none}
+  .h-stat{display:none}
+  .ltog{height:28px}
+  .lbtn{padding:0 10px;font-size:10px;gap:3px}
+  .lbtn .flag{font-size:12px}
+  .cam-bar{padding:4px 10px}
+  .cam-bar span{font-size:8px}
+  .ce-ring{width:50px;height:50px;margin-bottom:12px}
+  .ce-ring svg{width:22px;height:22px}
+  .ce-h{font-size:16px}
+  .ce-p{font-size:11px;margin-bottom:14px;padding:0 8px}
+  .ce-btn{padding:10px 24px;font-size:13px}
+  .panel-body{padding:10px 12px}
+  .ps{padding:8px 10px;font-size:12px}
+  .bot{height:auto;flex-direction:column;padding:10px 12px;gap:8px}
+  .bot-l{width:100%;justify-content:space-between;gap:8px}
+  .inp{flex:1;width:auto;font-size:14px;padding:8px 10px}
+  .bot-r{width:100%;gap:8px}
+  .btn{flex:1;justify-content:center;padding:10px 14px}
+  .bot-c{width:100%;padding-top:6px;border-top:1px solid var(--bdr)}
+  .disc{font-size:10px!important;line-height:1.3;max-width:60%}
+  .founder{font-size:8px}
+  .cd-num{font-size:72px}
 }
 </style>
 </head>
@@ -233,11 +216,10 @@ body.ar-mode .mono{font-family:var(--mono)}
     </div>
   </div>
 </header>
-<div class="mob-warn" id="mob-warn" data-t="mobWarn">⚠ Best experienced on desktop</div>
 
 <div class="main">
   <div class="left">
-    <div class="cam-bar"><span id="res-label">1280×720</span><span>MediaPipe Pose v0.5</span></div>
+    <div class="cam-bar"><span id="res-label">--</span><span>MediaPipe Pose v0.5</span></div>
     <div class="cam-area" id="cam-area">
       <video id="vid" playsinline></video>
       <div class="cam-frame" id="cam-frame">
@@ -250,6 +232,10 @@ body.ar-mode .mono{font-family:var(--mono)}
             <div><div class="g-ttl" id="g-ttl"></div><div class="g-desc" id="g-desc"></div></div>
           </div>
           <div class="g-bar"><div class="g-bar-f" id="g-fill" style="width:0%"></div></div>
+        </div>
+        <div class="countdown" id="countdown">
+          <div class="cd-num" id="cd-num">5</div>
+          <div class="cd-lbl" id="cd-lbl" data-t="getReady">Get ready…</div>
         </div>
       </div>
       <div class="cam-empty" id="cam-empty">
@@ -321,7 +307,25 @@ body.ar-mode .mono{font-family:var(--mono)}
 <div class="bot">
   <div class="bot-l">
     <input type="text" class="inp" id="pname" data-t-placeholder="patientPh" placeholder="Patient name / اسم المريض" />
+    <select class="delay-sel" id="delay-sel" title="Start delay">
+      <option value="0" data-t="delayNone">⏱ No delay</option>
+      <option value="5">⏱ 5s delay</option>
+      <option value="10">⏱ 10s delay</option>
+      <option value="15">⏱ 15s delay</option>
+    </select>
+    <select class="delay-sel" id="dur-sel" title="Recording duration">
+      <option value="0">⏳ Auto</option>
+      <option value="10">⏳ 10s</option>
+      <option value="20">⏳ 20s</option>
+      <option value="30">⏳ 30s</option>
+      <option value="45">⏳ 45s</option>
+      <option value="60">⏳ 60s</option>
+    </select>
     <span class="tmr" id="tmr">00:00</span>
+  </div>
+  <div class="bot-c">
+    <span class="founder">Developed by <strong>Ahmed Mezil, P.Eng.</strong></span>
+    <span class="disc" data-t="disc">⚠ Clinical support only — not a medical diagnosis</span>
   </div>
   <div class="bot-r">
     <button class="btn btn-rc" id="rbtn" onclick="toggleRec()" disabled><span class="rdot"></span><span id="rlbl" data-t="record">Record</span></button>
@@ -330,15 +334,13 @@ body.ar-mode .mono{font-family:var(--mono)}
       <span data-t="exportPdf">Export PDF</span>
     </button>
   </div>
-  <div class="bot-c">
-    <span class="founder">Developed by <strong>Ahmed Mezil, P.Eng.</strong></span>
-    <span class="disc" data-t="disc">⚠ Clinical support only — not a medical diagnosis</span>
-  </div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-const S={lang:'en',camOn:false,rec:false,recT:null,tInt:null,gInt:null,sess:[],hipY:[],prev:{lk:0,rk:0,ls:0,rs:0},fN:0,tConf:0,fpsN:0,fpsT:performance.now(),fps:0,gStep:-1,gTick:0,stepD:[]};
+const isMob=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const camW=isMob?640:1280, camH=isMob?480:720;
+const S={lang:'en',camOn:false,rec:false,recT:null,tInt:null,gInt:null,durTimer:null,sess:[],hipY:[],prev:{lk:0,rk:0,ls:0,rs:0},fN:0,tConf:0,fpsN:0,fpsT:performance.now(),fps:0,gStep:-1,gTick:0,stepD:[]};
 
 // ═══ FULL i18n — text swap only, no layout change ═══
 const T={
@@ -361,7 +363,7 @@ const T={
     camActive:'✓ Camera active — Pose tracking running',assessDone:'✓ Assessment complete — Export PDF when ready',
     printOpen:'✓ Print dialog opened — Save as PDF',camDenied:'Camera Access Denied',
     camDeniedP:'Allow camera permissions in browser and reload.<br>Ensure no other app is using the camera.',tryAgain:'↻ Try Again',
-    mobWarn:'⚠ Best experienced on desktop'
+    getReady:'Get ready…',delayNone:'⏱ No delay',durAuto:'⏳ Auto',
   },
   ar:{
     tag:'النسخة السريرية',camReady:'الكاميرا جاهزة',liveMeas:'القياسات الحية',ready:'جاهز',
@@ -373,7 +375,7 @@ const T={
     startP:'ضع المريض على بعد ٢-٣ أمتار من الكاميرا مع ظهور الجسم كاملاً.<br>يجب توفر إضاءة جيدة وخلفية واضحة.',
     startBtn:'▶ ابدأ الكاميرا',loading:'جارٍ تحميل نموذج الرصد…',loadTime:'التحميل الأول: ١٠–١٥ ثانية',
     ctaH:'اجلب حركة ميد إلى عيادتك',ctaP:'تحليل حركة بدون أجهزة خاصة.<br>بأسعار معقولة. عربي + إنجليزي.',ctaBtn:'← اطلب وصول تجريبي',
-    patientPh:'اسم المريض',disc:'⚠ للدعم السريري فقط — لا يشكل تشخيصاً طبياً',
+    patientPh:'اسم المريض',disc:'⚠ أداة دعم سريري فقط — ليست تشخيصاً طبياً',
     record:'تسجيل',exportPdf:'تصدير PDF',
     tracking:'التتبع نشط',recording:'جارٍ التسجيل…',complete:'اكتمل التقييم',
     stop:'● إيقاف',done:'تم ✓',
@@ -382,7 +384,7 @@ const T={
     camActive:'✓ الكاميرا نشطة — التتبع يعمل',assessDone:'✓ اكتمل التقييم — جاهز لتصدير PDF',
     printOpen:'✓ نافذة الطباعة مفتوحة — احفظ كـ PDF',camDenied:'تم رفض الوصول للكاميرا',
     camDeniedP:'اسمح بأذونات الكاميرا في المتصفح وأعد التحميل.<br>تأكد من عدم استخدام تطبيق آخر للكاميرا.',tryAgain:'↻ حاول مرة أخرى',
-    mobWarn:'⚠ يفضل الاستخدام على سطح المكتب'
+    getReady:'استعد…',delayNone:'⏱ بدون تأخير',durAuto:'⏳ تلقائي',
   }
 };
 const PROTO=[
@@ -409,6 +411,11 @@ function setLang(l){
     const k=el.getAttribute('data-t-placeholder');
     if(T[l][k]!=null) el.placeholder=T[l][k];
   });
+  // Update delay selector first option
+  const ds=document.getElementById('delay-sel');
+  if(ds&&ds.options[0])ds.options[0].text=T[l].delayNone||'⏱ No delay';
+  const drs=document.getElementById('dur-sel');
+  if(drs&&drs.options[0])drs.options[0].text=T[l].durAuto||'⏳ Auto';
 }
 
 function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),3500)}
@@ -425,11 +432,11 @@ function uC(spm){const e=document.getElementById('cad-v'),tt=document.getElement
 function startGuide(){S.gStep=0;S.gTick=0;S.stepD=[];showGStep();S.gInt=setInterval(tickG,1000)}
 function showGStep(){const p=PROTO[S.gStep];document.getElementById('guide').style.display='block';document.getElementById('g-num').textContent=S.gStep+1;document.getElementById('g-ttl').textContent=S.lang==='ar'?p.tA:p.t;document.getElementById('g-desc').textContent=S.lang==='ar'?p.dA:p.d;document.getElementById('g-fill').style.width='0%';document.getElementById('sc').textContent=`${S.gStep+1}/5`;PROTO.forEach((_,i)=>{const e=document.getElementById('ps'+i);e.classList.remove('act','done');if(i<S.gStep)e.classList.add('done');else if(i===S.gStep)e.classList.add('act')});S.gTick=0;S.stepD.push({step:S.gStep,name:p.t,nameAr:p.tA,frames:[],t0:Date.now()})}
 function tickG(){if(!S.rec||S.gStep<0)return;S.gTick++;document.getElementById('g-fill').style.width=Math.min(100,(S.gTick/PROTO[S.gStep].dur)*100)+'%';if(S.gTick>=PROTO[S.gStep].dur){if(S.gStep<PROTO.length-1){S.gStep++;showGStep()}else finishRec()}}
-function finishRec(){S.rec=false;clearInterval(S.gInt);clearInterval(S.tInt);S.gStep=-1;document.getElementById('guide').style.display='none';document.getElementById('rbtn').classList.remove('on');document.getElementById('rlbl').textContent=t('record');document.getElementById('hdot').className='hdot on';document.getElementById('h-stat').textContent=t('complete');document.getElementById('ebtn').disabled=false;document.getElementById('sc').textContent=t('done');PROTO.forEach((_,i)=>{document.getElementById('ps'+i).classList.remove('act');document.getElementById('ps'+i).classList.add('done')});toast(t('assessDone'))}
+function finishRec(){S.rec=false;clearInterval(S.gInt);clearInterval(S.tInt);if(S.durTimer){clearTimeout(S.durTimer);S.durTimer=null}S.gStep=-1;document.getElementById('guide').style.display='none';document.getElementById('rbtn').classList.remove('on');document.getElementById('rlbl').textContent=t('record');document.getElementById('hdot').className='hdot on';document.getElementById('h-stat').textContent=t('complete');document.getElementById('ebtn').disabled=false;document.getElementById('sc').textContent=t('done');PROTO.forEach((_,i)=>{document.getElementById('ps'+i).classList.remove('act');document.getElementById('ps'+i).classList.add('done')});toast(t('assessDone'))}
 
 function onResults(res){
   const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-  cv.width=1280;cv.height=720;const W=cv.width,H=cv.height;
+  cv.width=camW;cv.height=camH;const W=cv.width,H=cv.height;
   ctx.save();ctx.clearRect(0,0,W,H);
   if(res.image)ctx.drawImage(res.image,0,0,W,H);
   S.fpsN++;const now=performance.now();
@@ -468,8 +475,9 @@ async function startCamera(){
   try{
     if(!pI){pI=new Pose({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/pose/${f}`});pI.setOptions({modelComplexity:1,smoothLandmarks:true,enableSegmentation:false,minDetectionConfidence:.6,minTrackingConfidence:.6});pI.onResults(onResults)}
     const v=document.getElementById('vid');
-    cI=new Camera(v,{onFrame:async()=>{await pI.send({image:v})},width:1280,height:720});
+    cI=new Camera(v,{onFrame:async()=>{await pI.send({image:v})},width:camW,height:camH,facingMode:isMob?'environment':'user'});
     await cI.start();
+    document.getElementById('res-label').textContent=camW+'×'+camH;
     S.camOn=true;document.getElementById('cam-load').style.display='none';document.getElementById('cv').style.display='block';
     document.getElementById('hdot').className='hdot on';document.getElementById('h-stat').textContent=t('tracking');
     document.getElementById('rbtn').disabled=false;toast(t('camActive'));
@@ -481,16 +489,43 @@ async function startCamera(){
   }
 }
 
+// ═══ COUNTDOWN + DELAYED CAPTURE ═══
+function runCountdown(sec,cb){
+  const el=document.getElementById('countdown'),num=document.getElementById('cd-num'),lbl=document.getElementById('cd-lbl');
+  lbl.textContent=t('getReady');el.classList.add('vis');
+  let rem=sec;num.textContent=rem;
+  const iv=setInterval(()=>{rem--;if(rem<=0){clearInterval(iv);el.classList.remove('vis');cb()}else{num.textContent=rem}},1000);
+}
+
 function toggleRec(){
   if(!S.rec){
     if(!document.getElementById('pname').value.trim()){toast(t('nameFirst'));document.getElementById('pname').focus();return}
+    const delay=parseInt(document.getElementById('delay-sel').value)||0;
+    if(delay>0){
+      document.getElementById('rbtn').disabled=true;
+      document.getElementById('rlbl').textContent=delay+'s…';
+      runCountdown(delay,()=>{document.getElementById('rbtn').disabled=false;startRecording()});
+    }else{startRecording()}
+  }else{finishRec()}
+}
+
+function startRecording(){
     S.rec=true;S.recT=Date.now();S.sess=[];S.fN=0;S.tConf=0;
     document.getElementById('rbtn').classList.add('on');document.getElementById('rlbl').textContent=t('stop');
     document.getElementById('hdot').className='hdot rec';document.getElementById('h-stat').textContent=t('recording');
     document.getElementById('ebtn').disabled=true;
     S.tInt=setInterval(()=>{const e=Math.floor((Date.now()-S.recT)/1000);document.getElementById('tmr').textContent=String(Math.floor(e/60)).padStart(2,'0')+':'+String(e%60).padStart(2,'0')},1000);
-    startGuide();
-  }else{finishRec()}
+    // Duration auto-stop
+    const durSec=parseInt(document.getElementById('dur-sel').value)||0;
+    if(durSec>0){
+      // Skip guided protocol, just record for fixed duration
+      S.gStep=-1;
+      document.getElementById('sc').textContent=durSec+'s';
+      if(S.durTimer)clearTimeout(S.durTimer);
+      S.durTimer=setTimeout(()=>{if(S.rec)finishRec()},durSec*1000);
+    }else{
+      startGuide();
+    }
 }
 
 // ═══ BILINGUAL PDF ═══
