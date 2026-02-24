@@ -55,7 +55,6 @@ body.ar-mode .mono{font-family:var(--mono)}
 .flip-btn{display:none;position:absolute;bottom:8px;right:8px;z-index:8;background:rgba(5,10,20,.7);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:6px 10px;font-size:18px;cursor:pointer;color:#E2E8F0;transition:all .15s;line-height:1}
 .flip-btn:hover{background:rgba(255,255,255,.15)}
 .flip-btn:active{transform:scale(.9)}
-@media(max-width:768px){.flip-btn{display:block}}
 .cam-area{flex:1;display:flex;align-items:center;justify-content:center;position:relative;background:#050A14}
 .cam-area video{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
 .cam-frame{position:relative;width:100%;aspect-ratio:16/9;max-height:100%;overflow:hidden}
@@ -191,13 +190,14 @@ body.ar-mode .mono{font-family:var(--mono)}
   .panel-body{padding:10px 12px}
   .ps{padding:8px 10px;font-size:12px}
   .bot{height:auto;flex-direction:column;padding:10px 12px;gap:8px}
-  .bot-l{width:100%;justify-content:space-between;gap:8px}
+  .bot-l{width:100%;justify-content:space-between;gap:8px;order:1}
   .inp{flex:1;width:auto;font-size:14px;padding:8px 10px}
-  .bot-r{width:100%;gap:8px}
+  .bot-r{width:100%;gap:8px;order:2}
   .btn{flex:1;justify-content:center;padding:10px 14px}
-  .bot-c{width:100%;padding-top:6px;border-top:1px solid var(--bdr)}
-  .disc{font-size:10px!important;line-height:1.3;max-width:60%}
+  .bot-c{width:100%;padding-top:6px;border-top:1px solid var(--bdr);order:3;display:flex;align-items:center;justify-content:space-between}
+  .disc{font-size:10px!important;line-height:1.3;max-width:55%}
   .founder{font-size:8px}
+  .flip-btn{display:block}
   .cd-num{font-size:72px}
 }
 </style>
@@ -231,7 +231,6 @@ body.ar-mode .mono{font-family:var(--mono)}
         <canvas id="cv"></canvas>
         <div class="ov-fps" id="ov-fps">-- FPS</div>
         <div class="ov-conf" id="ov-conf">CONF<div class="cbar"><div class="cbar-f" id="cf"></div></div><span id="ct">0%</span></div>
-        <button class="flip-btn" id="flip-btn" onclick="flipCam()" title="Switch camera">🔄</button>
         <div class="guide" id="guide">
           <div class="g-row">
             <div class="g-num" id="g-num">1</div>
@@ -255,6 +254,7 @@ body.ar-mode .mono{font-family:var(--mono)}
         <div style="font-size:13px;color:#CBD5E1;font-weight:500" data-t="loading">Loading pose model…</div>
         <div style="font-size:11px;color:#475569;margin-top:3px" data-t="loadTime">First load: 10–15 seconds</div>
       </div>
+      <button class="flip-btn" id="flip-btn" onclick="flipCam()" title="Switch camera">🔄</button>
     </div>
   </div>
 
