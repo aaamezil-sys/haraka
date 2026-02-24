@@ -52,6 +52,9 @@ body.ar-mode .mono{font-family:var(--mono)}
 .left{display:flex;flex-direction:column;background:#0A0F1A;position:relative;overflow:hidden}
 .cam-bar{padding:8px 14px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,15,26,.95);border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0}
 .cam-bar span{font-size:10px;color:#475569;font-family:var(--mono)}
+.flip-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:2px 8px;font-size:14px;cursor:pointer;color:#94A3B8;transition:all .15s;line-height:1}
+.flip-btn:hover{background:rgba(255,255,255,.15)}
+.flip-btn:active{transform:scale(.9)}
 .cam-area{flex:1;display:flex;align-items:center;justify-content:center;position:relative;background:#050A14}
 .cam-area video{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
 .cam-frame{position:relative;width:100%;aspect-ratio:16/9;max-height:100%;overflow:hidden}
@@ -219,7 +222,7 @@ body.ar-mode .mono{font-family:var(--mono)}
 
 <div class="main">
   <div class="left">
-    <div class="cam-bar"><span id="res-label">--</span><span>MediaPipe Pose v0.5</span></div>
+    <div class="cam-bar"><span id="res-label">--</span><button class="flip-btn" id="flip-btn" onclick="flipCam()" title="Switch camera">🔄</button><span>MediaPipe Pose v0.5</span></div>
     <div class="cam-area" id="cam-area">
       <video id="vid" playsinline></video>
       <div class="cam-frame" id="cam-frame">
@@ -340,7 +343,7 @@ body.ar-mode .mono{font-family:var(--mono)}
 <script>
 const isMob=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 const camW=isMob?640:1280, camH=isMob?480:720;
-const S={lang:'en',camOn:false,rec:false,recT:null,tInt:null,gInt:null,durTimer:null,sess:[],hipY:[],prev:{lk:0,rk:0,ls:0,rs:0},fN:0,tConf:0,fpsN:0,fpsT:performance.now(),fps:0,gStep:-1,gTick:0,stepD:[]};
+const S={lang:'en',camOn:false,rec:false,recT:null,tInt:null,gInt:null,durTimer:null,facing:'user',sess:[],hipY:[],prev:{lk:0,rk:0,ls:0,rs:0},fN:0,tConf:0,fpsN:0,fpsT:performance.now(),fps:0,gStep:-1,gTick:0,stepD:[]};
 
 // ═══ FULL i18n — text swap only, no layout change ═══
 const T={
@@ -475,7 +478,7 @@ async function startCamera(){
   try{
     if(!pI){pI=new Pose({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/pose/${f}`});pI.setOptions({modelComplexity:1,smoothLandmarks:true,enableSegmentation:false,minDetectionConfidence:.6,minTrackingConfidence:.6});pI.onResults(onResults)}
     const v=document.getElementById('vid');
-    cI=new Camera(v,{onFrame:async()=>{await pI.send({image:v})},width:camW,height:camH,facingMode:isMob?'environment':'user'});
+    cI=new Camera(v,{onFrame:async()=>{await pI.send({image:v})},width:camW,height:camH,facingMode:S.facing});
     await cI.start();
     document.getElementById('res-label').textContent=camW+'×'+camH;
     S.camOn=true;document.getElementById('cam-load').style.display='none';document.getElementById('cv').style.display='block';
@@ -487,6 +490,18 @@ async function startCamera(){
     document.getElementById('cam-empty').querySelector('.ce-p').innerHTML=t('camDeniedP');
     document.getElementById('cam-empty').querySelector('.ce-btn').textContent=t('tryAgain');console.error(err);
   }
+}
+
+async function flipCam(){
+  if(!S.camOn||S.rec)return;
+  S.facing=S.facing==='user'?'environment':'user';
+  try{
+    if(cI){cI.stop();cI=null}
+    const v=document.getElementById('vid');
+    cI=new Camera(v,{onFrame:async()=>{await pI.send({image:v})},width:camW,height:camH,facingMode:S.facing});
+    await cI.start();
+    toast(S.facing==='user'?'📷 Front camera':'📷 Rear camera');
+  }catch(e){console.error(e);toast('⚠ Camera switch failed');S.facing=S.facing==='user'?'environment':'user'}
 }
 
 // ═══ COUNTDOWN + DELAYED CAPTURE ═══
